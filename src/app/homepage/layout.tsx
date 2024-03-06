@@ -31,7 +31,7 @@ export default function HomepageLayout({
           <Button
             type="text"
             onClick={onLogout}
-            style={{ color: "red" }}
+            className={styles.logoutBtn}
             size="large"
             icon={<LogoutOutlined />}
           >
