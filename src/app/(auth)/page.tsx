@@ -1,12 +1,13 @@
 "use client";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Typography } from "antd";
 import styles from "./login.module.css";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { AxiosError } from "../../Types/types";
+import { getData } from "@/service/apiService";
 
 const { Title } = Typography;
 
@@ -17,16 +18,35 @@ const Login = () => {
   }, []);
 
   const router = useRouter();
-  const LoginHandler = async (username: string, password: string) => {
-    const checkUser = await axios.post("https://mock.kgkit.net/auth/login", {
-      username: "kgk_user",
-      password: "xKcD!",
-    });
+  const [loading, setLoading] = useState(false);
 
-    if (checkUser.status === 200) {
-      const { token } = checkUser.data;
-      Cookies.set("token", token, { expires: 1 });
-      router.push("/homepage");
+  const LoginHandler = async (username: string, password: string) => {
+    try {
+      setLoading(true);
+      const checkUser = await getData(
+        "https://mock.kgkit.net/auth/login",
+        "post",
+        {
+          username: process.env.NEXT_PUBLIC_USERNAME,
+          password: process.env.NEXT_PUBLIC_PASSWORD,
+        }
+      );
+      if (checkUser.status === 200) {
+        const { token } = checkUser.data;
+        Cookies.set("token", token, { expires: 1 });
+        router.push("/homepage");
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError?.response) {
+        if (axiosError?.response.status === 401) {
+          message.error("Invalid username or password.");
+        } else {
+          message.error("Server error. Please try again later.");
+        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,7 +101,7 @@ const Login = () => {
             />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Log in
             </Button>
           </Form.Item>

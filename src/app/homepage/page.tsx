@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -9,16 +8,18 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { sortingOrderHandler } from "./constants";
-import { Diamond } from "../Types/types";
-import Search from "antd/es/input/Search";
+import { sortingOrderHandler } from "../../utils/constants";
+import { AxiosError, Diamond } from "../../Types/types";
 import { debounce } from "lodash";
+import styles from "./homepage.module.css";
+import { Input, message } from "antd";
+import { getData } from "@/service/apiService";
 
 const HomePage = () => {
   const router = useRouter();
   const [resData, setResData] = useState<Diamond[]>();
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isLoading,setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const columns = useMemo<MRT_ColumnDef<Diamond>[]>(
     () => [
       {
@@ -27,9 +28,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -41,9 +42,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -55,9 +56,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -72,13 +73,12 @@ const HomePage = () => {
         size: 200,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
-          
         },
         sortingFn: (rowA, rowB, columnId) => {
           return sortingOrderHandler(rowA, rowB, columnId);
@@ -90,9 +90,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -107,9 +107,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -138,9 +138,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -156,9 +156,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -174,9 +174,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -191,9 +191,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -205,9 +205,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -221,9 +221,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -237,9 +237,9 @@ const HomePage = () => {
         size: 150,
         muiTableHeadCellProps: {
           align: "center",
-          sx:{
-            fontSize:'16px'
-          }
+          sx: {
+            fontSize: "16px",
+          },
         },
         muiTableBodyCellProps: {
           align: "center",
@@ -253,17 +253,19 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const token = Cookies.get("token");
-
-        const response = await axios.post(
+        const response = await getData(
           "https://mock.kgkit.net/store/listAllStones",
+          "post",
           {
             auth: token,
           }
         );
-        setIsLoading(false)
+        setIsLoading(false);
         setResData(response.data.data);
       } catch (error) {
-        if (error?.response?.data?.message === "Unauthorized") router.push("/");
+        if ((error as AxiosError).response?.data?.message === "Unauthorized")
+          router.push("/");
+        else message.error("Server error. Please try again later.");
       }
     };
     if (!resData) {
@@ -284,8 +286,8 @@ const HomePage = () => {
   const table = useMaterialReactTable({
     columns,
     data: filteredData ? filteredData : [],
-    state:{
-      isLoading:isLoading
+    state: {
+      isLoading: isLoading,
     },
     enablePagination: false,
     enableBottomToolbar: false,
@@ -293,18 +295,18 @@ const HomePage = () => {
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     enableColumnActions: false,
-    enableFilters:false,
-    enableRowSelection:true
+    enableFilters: false,
+    enableRowSelection: true,
   });
+
   return (
     <>
-      <div style={{ textAlign: "center" }}>
-        <Search
+      <div className={styles.tableWrapper}>
+        <Input
           placeholder="Search"
           onChange={(e) => handleSearch(e.target.value)}
-          style={{ width: 400,paddingTop:20 }}
+          className={styles.searchInput}
         />
-
         <MaterialReactTable table={table} />
       </div>
     </>

@@ -1,10 +1,10 @@
 .loginContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .loginForm {
   display: flex;
   justify-content: center;
@@ -19,13 +19,11 @@
   background-color: #fff;
 }
 
-  
-  .loginTitleContainer {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  
-  .loginTitle {
-    margin: 0;
-  }
-  
+.loginTitleContainer {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.loginTitle {
+  margin: 0;
+}

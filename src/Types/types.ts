@@ -13,3 +13,12 @@ export interface Diamond {
     price_per_carat: number;
     certificate_number: number;
   }
+
+  export interface AxiosError {
+    response?: {
+      status: number;
+      data?:any
+    };
+    request?: any;
+    message?: string;
+  }

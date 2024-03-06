@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
