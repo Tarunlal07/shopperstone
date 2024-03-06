@@ -1,6 +1,6 @@
 
 import { Row } from "@tanstack/table-core";
-import { Diamond } from "../types/types";
+import { Diamond } from "../Types/types";
 
 const order = {
   color: ["D", "E", "F", "G", "H", "I", "J"],
