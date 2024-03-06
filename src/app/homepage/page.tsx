@@ -10,7 +10,7 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { sortingOrderHandler } from "./constants";
-import { Diamond } from "../types/types";
+import { Diamond } from "../Types/types";
 import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 
