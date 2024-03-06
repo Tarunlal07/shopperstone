@@ -1,0 +1,31 @@
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+.loginForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loginContent {
+  width: 400px;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+  
+  .loginTitleContainer {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .loginTitle {
+    margin: 0;
+  }
+  
